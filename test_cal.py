@@ -6,21 +6,10 @@ Contact:403505960@qq.com
 ==================
 """
 
+from data.calculator import data_add_int,data_divide,data_add_float,ids_add_int,ids_divide,ids_add_float
 import pytest
 
-# 加法数据及用例名称
-data_add = [
-    [0,0,0],[0.01,0,0.01],[1,0.01,1.01],[1.5,1.5,3],[10000,10000,20000]
-]
-ids_add = ["测试0加0","测试0加0.01","测试1加0.01","测试小数相加形成整数","测试5位数相加"]
 
-# 除法数据及用例名称
-data_divide = [
-    [300,3,100], [100,3,33.33], [100,6,16.67], [3,2,1.5], [5,4,1.25],[0.2,0.02,10],
-    [3,0,'error'],[0,3,0],['abc',0,'error']
-]
-ids_divide = ["测试整除", "测试无限小数-不四舍五入", "测试无效小数-四舍五入",
-              "测试结果一位小数", "测试结果两位小数","测试小数相除","除以0","0除以整数","除数有字符串"]
 
 
 
@@ -44,7 +33,7 @@ def func_minus(a, b):
 
 
 def func_add(a, b):
-    return a + b
+    return round(a + b, 2)
 
 
 class TestCalculator:
@@ -56,9 +45,15 @@ class TestCalculator:
         print("\n 结束计算 \n")
         print("------------")
 
-    @pytest.mark.parametrize("a,b,expect", data_add, ids=ids_add)
-    def test_answer_add(self,a,b,expect):
+    @pytest.mark.parametrize("a,b,expect", data_add_int, ids=ids_add_int)
+    def test_answer_add_int(self,a,b,expect):
+        """测试int的情况"""
         assert expect == func_add(a,b)
+
+    @pytest.mark.parametrize("a,b,expect", data_add_float, ids=ids_add_float)
+    def test_answer_add_float(self,a,b,expect):
+        """测试float的情况"""
+        assert expect == func_add(a, b)
 
     def test_answer_minus(self):
         assert 4 == func_minus(10,6)
