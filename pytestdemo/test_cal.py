@@ -6,8 +6,8 @@ Contact:403505960@qq.com
 ==================
 """
 
-from data.calculator import data_add_int,data_divide,data_add_float,ids_add_int,ids_divide,ids_add_float
-from pages.calculator import Calculator
+from pytestdemo.data.calculator import data_divide,data_add_float, ids_divide,ids_add_float
+from pytestdemo.pages.calculator import Calculator
 import pytest
 import allure
 

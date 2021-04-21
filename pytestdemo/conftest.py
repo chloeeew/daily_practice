@@ -6,9 +6,9 @@ Contact:403505960@qq.com
 ==================
 """
 
-from data.calculator import data_add_int,ids_add_int
+from pytestdemo.data.calculator import data_add_int,ids_add_int
 import pytest
-from typing import List
+
 
 def pytest_collection_modifyitems(items):
     for item in items:
