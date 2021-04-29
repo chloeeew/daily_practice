@@ -59,3 +59,21 @@ def test_cookie_v2():
         for cookie in cookies:
             driver.add_cookie(cookie)
     driver.get('https://work.weixin.qq.com/wework_admin/frame')
+
+
+def test_wework_debug():
+    """
+    测试已经打开并登录的企业微信
+    切换到通讯录
+    """
+    opt = webdriver.ChromeOptions()
+    # 设置debug地址
+    opt.debugger_address = "127.0.0.1:9222"
+    driver = webdriver.Chrome(options=opt)
+    driver.implicitly_wait(10)
+
+    with open("data.yaml", "r", encoding="utf-8") as f:
+        cookies = yaml.safe_load(f)
+        for cookie in cookies:
+            driver.add_cookie(cookie)
+    driver.get('https://work.weixin.qq.com/wework_admin/frame')

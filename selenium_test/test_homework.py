@@ -11,7 +11,11 @@ from selenium.webdriver.common.by import By
 import time
 import yaml
 
+
 def test_add_member_by_cookie():
+    """
+    测试cookie（首先要复用拿到cookie才能执行这个方法）
+    """
     driver = webdriver.Chrome()
     driver.get('https://work.weixin.qq.com/wework_admin/loginpage_wx')
     # 读取保存的cookie文件
