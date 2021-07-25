@@ -16,11 +16,6 @@ class HTTPEvents:
     def request(self, flow: mitmproxy.http.HTTPFlow):
         """
         The full HTTP request has been read.
-
-        Note: If request streaming is active, this event fires after the entire body has been streamed.
-        HTTP trailers, if present, have not been transmitted to the server yet and can still be modified.
-        Enabling streaming may cause unexpected event sequences: For example, `response` may now occur
-        before `request` because the server replied with "413 Payload Too Large" during upload.
         """
         # map local
         # 赶在response前把内容改好了
@@ -49,16 +44,6 @@ class HTTPEvents:
 
             flow.response.text = json.dumps(data_dict)
 
-    def error(self, flow: mitmproxy.http.HTTPFlow):
-        """
-        An HTTP error has occurred, e.g. invalid server responses, or
-        interrupted connections. This is distinct from a valid server HTTP
-        error response, which is simply a response with an HTTP error code.
-
-        Every flow will receive either an error or an response event, but not both.
-        """
-        ctx.log(f"error: {flow=}")
-
 
 
 def recursion(data,times=1):
@@ -79,6 +64,7 @@ def recursion(data,times=1):
 addons = [
     HTTPEvents()
 ]
+
 
 if __name__ == '__main__':
     from mitmproxy.tools.main import mitmdump
