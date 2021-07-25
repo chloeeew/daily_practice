@@ -5,10 +5,13 @@ Time:2021/7/24 17:35
 Contact:403505960@qq.com
 ==================
 """
+import os
 import json
 import mitmproxy.http
-from mitmproxy import ctx
 from mitmproxy import http
+
+path_dir = os.path.dirname(__file__)
+stock_path = os.path.join(path_dir,"stock.json")
 
 class HTTPEvents:
     """"""
@@ -20,7 +23,7 @@ class HTTPEvents:
         # map local
         # 赶在response前把内容改好了
         if '/v5/stock/batch/quote.json?_t=' in flow.request.url and 'x=' in flow.request.url:
-            with open(r'E:\daily_practice\mock_test\stock.json',mode="r",encoding="utf-8") as f:
+            with open(stock_path,mode="r",encoding="utf-8") as f:
                 data_dict = json.loads(f.read())
                 new_data = recursion(data_dict,2)
                 # response是None所以需要创造一个response并赋值
