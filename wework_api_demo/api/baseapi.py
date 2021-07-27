@@ -25,7 +25,10 @@ class BaseApi:
 
     def requests_by_access_token(self,corpsecret,method,api_path,**kwargs) -> dict:
         access_token = self.__get_access_token(corpsecret)
-        response_json = self.rm.send_requests(method,self.host+api_path,params={"access_token":access_token},**kwargs)
+        param_data = {"access_token":access_token}
+        if kwargs.get("params"):
+            param_data.update(kwargs.get('params'))
+        response_json = self.rm.send_requests(method,self.host+api_path,params=param_data,**kwargs)
         return response_json
 
 
