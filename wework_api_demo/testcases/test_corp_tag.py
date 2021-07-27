@@ -7,6 +7,7 @@ Contact:403505960@qq.com
 """
 import pytest
 from api.externalcontact.corp_tag import CorpTag
+from utils.yaml_controller import yaml_data
 
 
 @pytest.mark.usefixtures("init_corp_tag")
@@ -21,33 +22,36 @@ class TestCorpTag:
         5、删除1个tag
         6、再删除1个tag使得group被删除
         """
+        datas = yaml_data['smoke']
         ct = CorpTag()
         # 获取当前所有tag,默认存在组客户等级，以及tag名一般
         search_result_01 = ct.search_tag()
-        assert "客户等级" in ct.get_groups_name(search_result_01)
-        assert "一般" in ct.get_tags_name(search_result_01)
+        assert datas['testsearch']['groupname'] in ct.get_groups_name(search_result_01)
+        assert datas['testsearch']['tagsname'] in ct.get_tags_name(search_result_01)
 
         # 添加tag：冒烟tag1，组名：冒烟组GROUP2!
-        ct.add_tag([{"name":"冒烟tag1"}],group_name="冒烟组GROUP2!")
+        ct.add_tag([{"name":datas['testadd']['tagname']}],group_name=datas['testadd']['groupname'])
         search_result_02 = ct.search_tag()
-        assert "冒烟tag1" in ct.get_tags_name(search_result_02)
-        assert "冒烟组GROUP2!" in ct.get_groups_name(search_result_02)
-        tag_01_id = ct.get_tags_id_by_name(search_result_02,"冒烟tag1")[0]
-        group_id = ct.get_groups_tag_id_by_name(search_result_02,"冒烟组GROUP2!")[0]
+        assert datas['testadd']['tagname'] in ct.get_tags_name(search_result_02)
+        assert datas['testadd']['groupname'] in ct.get_groups_name(search_result_02)
+        # 获取tag后续用
+        tag_01_id = ct.get_tags_id_by_name(search_result_02,datas['testadd']['tagname'])[0]
+        group_id = ct.get_groups_tag_id_by_name(search_result_02,datas['testadd']['groupname'])[0]
 
 
         # 在添加的组下再次添加tag,order=3
         # get_order_by_name
-        ct.add_tag([{"name":"冒烟弼","order":3}],group_id=group_id)
+        ct.add_tag([{"name":datas['testaddorder']['tagname'],"order":datas['testaddorder']['order']}],
+                   group_id=group_id)
         search_result_03 = ct.search_tag()
-        assert "冒烟弼" in ct.get_tags_name(search_result_03)
-        assert 3 == ct.get_orders_by_name(search_result_03,"冒烟弼")[0]
-        tag_02_id = ct.get_tags_id_by_name(search_result_03,"冒烟弼")[0]
+        assert datas['testaddorder']['tagname'] in ct.get_tags_name(search_result_03)
+        assert datas['testaddorder']['order'] == ct.get_orders_by_name(search_result_03,datas['testaddorder']['tagname'])[0]
+        tag_02_id = ct.get_tags_id_by_name(search_result_03,datas['testaddorder']['tagname'])[0]
 
         # 编辑tag,更改为（中+字符）
-        ct.edit_tag(id=tag_02_id,name="冒烟莪@#￥")
+        ct.edit_tag(id=tag_02_id,name=datas['testedit']['tagname'])
         search_result_04 = ct.search_tag()
-        assert "冒烟莪@#￥" in ct.get_tags_name(search_result_04)
+        assert datas['testedit']['tagname'] in ct.get_tags_name(search_result_04)
 
 
         # 删除1个tag，group还在
@@ -64,6 +68,13 @@ class TestCorpTag:
 
     def test_add_tag(self):
         pass
+
+    def test_edit_tag(self):
+        pass
+
+    def test_delete_tag(self):
+        pass
+
 
 
 
